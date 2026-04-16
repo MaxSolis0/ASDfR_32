@@ -1,0 +1,46 @@
+Package xrf_test
+-----------------------------------------------
+Description: This package allows for testing the RELbot in a raw state, sending FSM commands and wheel speeds.
+
+Building instructions: Place folder in src. Build normally via colcon build.
+
+*****Node: tester*****
+Input:
+/XenoState
+        Type: std_msgs/msg/Int32
+        FSM state
+
+Output:
+/input/left_motor/setpoint_vel
+        Type: example_interfaces/msg/Float64
+        Left wheel speed, decimal ratio of maximum.
+        
+/input/right_motor/setpoint_vel
+	Type: example_interfaces/msg/Float64
+        Right wheel speed, decimal ratio of maximum.
+
+/XenoCmd
+	Type:std_msgs/msg/Int32
+	FSM command
+
+Run:
+	ros2 run xrf_test tester --ros-args --params-file src/xrf_test/config/tester.yaml
+	# Change parameters during runtime 
+	ros2 param set /tester setpoints_array "[2.0, 1.0, 1.0, 1.0]"
+
+Parameters:
+	reliability: [string] reliability policy used by QoS
+	durability: [string] durability policy used by QoS
+	history: [string] history policy used by QoS
+	depth: [int] Amount of messages to keep for history policy
+	FSMcomm: [int] command for FSM
+	rightSpeed: [double] Right wheel speed, decimal ratio of maximum.
+	leftSpeed: [double] Left wheel speed, decimal ratio of maximum.
+	setpoints_array: [double[]] Sequence for testing, format: [duration, FSM, rightSpeed, leftSpeed, ...]
+	
+Core components: 
+	timer_callback(): Run the appropriate sequence periodically
+	sequence(): Parse sequence and run publish function
+	publish_command(): Publish FSM command and wheel speeds
+	loop_callback(): Get and print FSM state
+	
