@@ -24,7 +24,7 @@ Output:
 	FSM command
 
 Run:
-	ros2 run xrf_test tester --ros-args --params-file src/xrf_test/config/tester.yaml
+	ros2 launch xrf_test xrf_test.launch.py
 	# Change parameters during runtime 
 	ros2 param set /tester setpoints_array "[2.0, 1.0, 1.0, 1.0]"
 
